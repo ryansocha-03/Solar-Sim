@@ -1,7 +1,7 @@
 # Solar-Sim
 
 ## How to compile WebAssembly
-In a terminal, navigate to the emscripten root directory emsdk > upstream > emscripten
+In a terminal, navigate to the emscripten root directory emsdk > upstream > emscripten.
 The general form command for compiling is
 
     ./emcc <file-name> -o <destination-file-name>
@@ -11,7 +11,7 @@ Be sure to include extensions and file paths for both source and destination fil
 ## To launch local server
 In a terminal, navigate to the root directory of the project and use the following command
 
-    npm vite
+    npx vite
 
 This will launch a dev server at http://localhost:<port>
 The default port is 5173
