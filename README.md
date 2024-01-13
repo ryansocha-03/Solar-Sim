@@ -25,5 +25,7 @@ The physics engine is built in C and compiled to WebAssembly. When cloning this 
     2. (optional) execute make clean
     3. Execute make
 
+Note: compiler optimizations seem to introduce some inexplicable behavior so avoid for now.
+
 ### TODO:
     Figure out how to explicity configure what file, port, etc vite uses to launch
