@@ -1,9 +1,11 @@
 #include <emscripten.h>
+#include "JulianDate.h"
 
 EMSCRIPTEN_KEEPALIVE
 int* KeplerEngine(int a, int b) {
     int result[2];
     result[0] = a;
-    result[1] = b;
+    int julianTest = Julian(b);
+    result[1] = julianTest;
     return result;
 }
