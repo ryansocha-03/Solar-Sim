@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 
-double getJulianDate() {
+double getJulianEphemerisDate() {
     struct tm* terrestrialTime = getCurrentTT();
     printTM(terrestrialTime);
     double julianDate = getJulianDateFromTM(terrestrialTime);

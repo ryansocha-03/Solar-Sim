@@ -1,6 +1,6 @@
 #include <time.h>
 
-double getJulianDate();
+double getJulianEphemerisDate();
 
 double getJulianDateFromTM(struct tm*);
 
