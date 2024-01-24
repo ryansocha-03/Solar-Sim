@@ -1,12 +1,12 @@
 CC=../../../../emsdk/upstream/emscripten/emcc
 
-all: JulianDate.o
+all: julian_date.o
 
-JulianDate.o: JulianDate.c JulianDate.h
-	$(CC) JulianDate.c -c -o JulianDate.o
+julian_date.o: julian_date.c julian_date.h
+	$(CC) julian_date.c -c -o julian_date.o
 
 clean:
-	rm -rf JulianDate.o
+	rm -rf julian_date.o
 # CC = gcc
 # CFLAGS = -Wall -Wextra -Wno-format
 # SRC_DIR = src
