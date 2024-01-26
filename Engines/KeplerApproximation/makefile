@@ -1,21 +1,24 @@
 CC=../../../../emsdk/upstream/emscripten/emcc
+UTIL_DIR=../util
 
 all: kepler
 
-kepler: main.o JulianDate.o
-	$(CC) main.o JulianDate.o -o main.js
+kepler: main.o kepler_approximation.o $(UTIL_DIR)/julian_date.o
+	$(CC) main.o kepler_approximation.o $(UTIL_DIR)/julian_date.o -o kepler.mjs
 
-main.o: main.c JulianDate.h
+main.o: main.c $(UTIL_DIR)/julian_date.h
 	$(CC) main.c -c -o main.o
 
-JulianDate.o: JulianDate.c JulianDate.h
-	$(CC) JulianDate.c -c -o JulianDate.o
+kepler_approximation.o: kepler_approximation.c kepler_approximation.h
+	$(CC) kepler_approximation.c -c -o kepler_approximation.o
+
+julian_date.o: $(UTIL_DIR)/julian_date.c $(UTIL_DIR)/julian_date.h
+	$(CC) $(UTIL_DIR)/julian_date.c -c -o $(UTIL_DIR)/julian_date.o
 
 clean:
-	rm -rf main.o JulianDate.o main.js main.wasm
+	rm -rf main.o kepler_approximation.o kepler.mjs kepler.wasm 
 # CC = gcc
 # CFLAGS = -Wall -Wextra -Wno-format
-
 # SRC_DIR = src
 # OBJ_DIR = obj
 
