@@ -3,8 +3,12 @@
 
 #include "planets.h"
 
-double getKeplerT(double);
+double calcKeplerT(double);
 
-void getCurrentElements(Planet*, double);
+void calcCurrentElements(Planet*, double);
+
+void calcArgumentPerihelion(Planet*);
+
+void calcMeanAnomaly(Planet*, double);
 
 #endif
