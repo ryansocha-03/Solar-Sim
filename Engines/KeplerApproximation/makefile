@@ -3,17 +3,20 @@ UTIL_DIR=../util
 
 all: kepler
 
-kepler: main.o kepler_approximation.o $(UTIL_DIR)/julian_date.o
-	$(CC) main.o kepler_approximation.o $(UTIL_DIR)/julian_date.o -o kepler.mjs
+kepler: main.o kepler_approximation.o julian_date.o util_math.o
+	$(CC) main.o kepler_approximation.o $(UTIL_DIR)/julian_date.o $(UTIL_DIR)/util_math.o -o kepler.mjs
 
 main.o: main.c $(UTIL_DIR)/julian_date.h
 	$(CC) main.c -c -o main.o
 
-kepler_approximation.o: kepler_approximation.c kepler_approximation.h
+kepler_approximation.o: kepler_approximation.c kepler_approximation.h $
 	$(CC) kepler_approximation.c -c -o kepler_approximation.o
 
 julian_date.o: $(UTIL_DIR)/julian_date.c $(UTIL_DIR)/julian_date.h
 	$(CC) $(UTIL_DIR)/julian_date.c -c -o $(UTIL_DIR)/julian_date.o
+
+util_math.o: $(UTIL_DIR)/util_math.c $(UTIL_DIR)/util_math.h
+	$(CC) $(UTIL_DIR)/util_math.c -c -o $(UTIL_DIR)/util_math.o
 
 clean:
 	rm -rf main.o kepler_approximation.o kepler.mjs kepler.wasm 

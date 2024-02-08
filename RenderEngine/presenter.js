@@ -17,10 +17,11 @@ camera.position.z = 500;
 camera.position.y = 300;
 camera.rotateX((Math.PI / 180) * -35);
 
+updateViaEngine(0);
+
 function animate() {
     requestAnimationFrame( animate );
     rotatePlanets(scene);
-    updateViaEngine(1);
     renderer.render( scene, camera );
 }
 animate()

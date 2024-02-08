@@ -11,4 +11,6 @@ void calcArgumentPerihelion(Planet*);
 
 void calcMeanAnomaly(Planet*, double);
 
+void calcEccentricAnomaly(Planet*);
+
 #endif

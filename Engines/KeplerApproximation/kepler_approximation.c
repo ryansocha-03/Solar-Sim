@@ -1,5 +1,7 @@
 #include "planets.h"
 #include "math.h"
+#include "../util/util_math.h"
+#include <stdio.h>
 
 double calcKeplerT(double julianEphemerisDate) {
     const double T_SUBTRACTOR = 2451545.0;
@@ -21,8 +23,34 @@ void calcArgumentPerihelion(Planet *planet) {
 }
 
 void calcMeanAnomaly(Planet *planet, double T) {
-    double additionalTrigTerms = (planet->additional_terms.c * cos(planet->additional_terms.f * T)) + (planet->additional_terms.s * sin(planet->additional_terms.f * T));
+    double additionalTrigTerms = planet->additional_terms.c * radiansToDegrees((planet->additional_terms.f * T)) + planet->additional_terms.s * radiansToDegrees((planet->additional_terms.f * T));
     planet->mean_anomaly = planet->current_k_elements.mean_longitude - planet->current_k_elements.longitude_perihelion + (planet->additional_terms.b * (T * T)) + additionalTrigTerms;
+}
+
+void calcEccentricAnomaly(Planet *planet) {
+    double mod_mean_anomaly;
+    if (planet->mean_anomaly <= 0) {
+        mod_mean_anomaly = fmod(planet->mean_anomaly, -180.0);
+    } else {
+        mod_mean_anomaly = fmod(planet->mean_anomaly, 180.0);
+    }
+    double deg_e = radiansToDegrees(planet->current_k_elements.eccentricity);
+
+    //deg e is the eccentricity in degrees. Mod mean anomaly is the mean anomaly in degrees modded to be between -180 and 180.
+    double e_n = mod_mean_anomaly - deg_e * radiansToDegrees(sin(degreesToRadians(mod_mean_anomaly)));
+    const double STOP = 0.000001;
+    double delta_e = 1.0;
+    double delta_m;
+   
+    int iterations = 0;
+    while(fabs(delta_e) > STOP) {
+        iterations += 1;
+        delta_m = mod_mean_anomaly - (e_n - deg_e * radiansToDegrees(sin(degreesToRadians(e_n))));
+        delta_e = delta_m / (1 - deg_e * radiansToDegrees(cos(degreesToRadians(e_n))));
+        e_n = e_n + delta_e;
+    }
+    printf("Number of iterations: %d\n", iterations);
+    planet->eccentric_anomaly = e_n;
 }
 
 
