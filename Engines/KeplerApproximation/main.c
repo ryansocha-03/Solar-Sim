@@ -30,6 +30,9 @@ double* KeplerEngine(int a, int b) {
     calcMeanAnomaly(&mercury, currentT);
     printf("Mean Anomaly:\t\t\t\t\t\t%.6f\n", mercury.mean_anomaly);
 
+    calcEccentricAnomaly(&mercury);
+    printf("Eccentric Anomaly:\t\t\t\t%.6f\n", mercury.eccentric_anomaly);
+
     result[0] = julianEphemerisDate;
     result[1] = currentT;
     return result;
