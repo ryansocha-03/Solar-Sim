@@ -2,14 +2,14 @@
 #include <stdio.h>
 #include <time.h>
 
-double getJulianEphemerisDate() {
-    struct tm* terrestrialTime = getCurrentTT();
-    double julianDate = getJulianDateFromTM(terrestrialTime);
+double calcJulianEphemerisDate() {
+    struct tm* terrestrialTime = calcCurrentTT();
+    double julianDate = calcJulianDateFromTM(terrestrialTime);
 
     return julianDate;
 }
 
-struct tm* getCurrentTT() {
+struct tm* calcCurrentTT() {
     //TIA time is exactly 37 seconds ahead of UTC time as of 1/14/2024. I leap second is added each leap year on leap day.
     //TT is exactly 32.184 seconds ahead of TIA (Does not change). So, a total of 69.184 seconds need to be added. Only adding
     //69 seconds for now.
@@ -18,7 +18,7 @@ struct tm* getCurrentTT() {
     return gmtime(&utcSeconds);
 }
 
-double getJulianDateFromTM(struct tm* TT) {
+double calcJulianDateFromTM(struct tm* TT) {
     const int MINUTESINHOUR = 60;
     const int SECONDSINHOUR = 3600;
 
