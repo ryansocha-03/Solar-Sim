@@ -1222,8 +1222,6 @@ function dbg(text) {
       }
     };
 
-  var _emscripten_date_now = () => Date.now();
-
   var _emscripten_memcpy_js = (dest, src, num) => HEAPU8.copyWithin(dest, src, src + num);
 
   var getHeapMax = () =>
@@ -1371,8 +1369,6 @@ var wasmImports = {
   _gmtime_js: __gmtime_js,
   /** @export */
   _tzset_js: __tzset_js,
-  /** @export */
-  emscripten_date_now: _emscripten_date_now,
   /** @export */
   emscripten_memcpy_js: _emscripten_memcpy_js,
   /** @export */

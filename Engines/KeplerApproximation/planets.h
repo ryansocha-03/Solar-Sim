@@ -12,6 +12,12 @@ typedef struct KeplerParameters {
     double longitude_ascending_node;
 } KeplerParameters;
 
+typedef struct Coordinates {
+    double x;
+    double y;
+    double z;
+} Coordinates;
+
 typedef struct AdditionalTerms {
     double b;
     double c;
@@ -24,6 +30,7 @@ typedef struct Planet {
     KeplerParameters k_rates; 
     KeplerParameters current_k_elements;
     AdditionalTerms additional_terms;
+    Coordinates heliocentric_coordinates;
     double argument_perihelion;
     double mean_anomaly;
     double eccentric_anomaly;

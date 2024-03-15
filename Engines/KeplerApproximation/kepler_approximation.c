@@ -49,9 +49,14 @@ void calcEccentricAnomaly(Planet *planet) {
         delta_e = delta_m / (1 - deg_e * radiansToDegrees(cos(degreesToRadians(e_n))));
         e_n = e_n + delta_e;
     }
-    printf("Number of iterations: %d\n", iterations);
+    //printf("Number of iterations: %d\n", iterations);
     planet->eccentric_anomaly = e_n;
 }
 
+void calcHeliocentricCoords(Planet *planet) {
+    planet->heliocentric_coordinates.x = planet->current_k_elements.semi_major_axis * (radiansToDegrees(cos(degreesToRadians(planet->eccentric_anomaly))) - planet->current_k_elements.eccentricity);
+    planet->heliocentric_coordinates.y = planet->current_k_elements.semi_major_axis * sqrt(1 - planet->current_k_elements.eccentricity * planet->current_k_elements.eccentricity) * radiansToDegrees(sin(degreesToRadians(planet->eccentric_anomaly)));
+    planet->heliocentric_coordinates.z = 0.0;
+}
 
 

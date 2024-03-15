@@ -3,11 +3,11 @@
 
 #include <time.h>
 
-double calcJulianEphemerisDate();
+double calcJulianEphemerisDate(long long requestedTime);
 
 double calcJulianDateFromTM(struct tm*);
 
-struct tm *calcCurrentTT();
+struct tm *calcCurrentTT(long long requestedTime);
 
 void printTM(struct tm*);
 
