@@ -13,4 +13,6 @@ void calcMeanAnomaly(Planet*, double);
 
 void calcEccentricAnomaly(Planet*);
 
+void calcHeliocentricCoords(Planet*);
+
 #endif

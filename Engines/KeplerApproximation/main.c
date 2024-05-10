@@ -5,7 +5,8 @@
 #include "kepler_approximation.h"
 
 EMSCRIPTEN_KEEPALIVE
-double* KeplerEngine(int a, int b) {
+double* KeplerEngine(int numberOfPlanets, long long requestedTime) {
+    double coords[3 * numberOfPlanets];
     Planet mercury = { .k_elements.semi_major_axis = 0.38709927, .k_elements.eccentricity = 0.20563593, .k_elements.inclination = 7.00497902, .k_elements.mean_longitude = 252.25032350, .k_elements.longitude_perihelion = 77.45779628, .k_elements.longitude_ascending_node = 48.33076593, .k_rates.semi_major_axis = 0.00000037, .k_rates.eccentricity = 0.00001906, .k_rates.inclination = -0.00594749, .k_rates.mean_longitude = 149472.67411175, .k_rates.longitude_perihelion = 0.16047689, .k_rates.longitude_ascending_node = -0.12534081, .additional_terms.b = 0.0, .additional_terms.c = 0.0, .additional_terms.s = 0.0, .additional_terms.f = 0.0 };
     Planet venus = { .k_elements.semi_major_axis = 0.72333566, .k_elements.eccentricity = 0.00677672, .k_elements.inclination = 3.39467605, .k_elements.mean_longitude = 181.97909950, .k_elements.longitude_perihelion = 131.60246718, .k_elements.longitude_ascending_node = 76.67984255, .k_rates.semi_major_axis = 0.00000390, .k_rates.eccentricity = -0.00004107, .k_rates.inclination = -0.00078890, .k_rates.mean_longitude = 58517.81538729, .k_rates.longitude_perihelion = 0.00268329, .k_rates.longitude_ascending_node = -0.27769418, .additional_terms.b = 0.0, .additional_terms.c = 0.0, .additional_terms.s = 0.0, .additional_terms.f = 0.0 };
     Planet earth = { .k_elements.semi_major_axis = 1.00000261, .k_elements.eccentricity = 0.01671123, .k_elements.inclination = -0.00001531, .k_elements.mean_longitude = 100.46457166, .k_elements.longitude_perihelion = 102.93768193, .k_elements.longitude_ascending_node = 0.0, .k_rates.semi_major_axis = 0.00000562, .k_rates.eccentricity = -0.00004392, .k_rates.inclination = -0.01294668, .k_rates.mean_longitude = 35999.37244981, .k_rates.longitude_perihelion = 0.32327364, .k_rates.longitude_ascending_node = 0.0, .additional_terms.b = 0.0, .additional_terms.c = 0.0, .additional_terms.s = 0.0, .additional_terms.f = 0.0 };
@@ -15,25 +16,27 @@ double* KeplerEngine(int a, int b) {
     Planet uranus = { .k_elements.semi_major_axis = 19.18916464, .k_elements.eccentricity = 0.04725744, .k_elements.inclination = 0.77263783, .k_elements.mean_longitude = 313.23810451, .k_elements.longitude_perihelion = 170.95427630, .k_elements.longitude_ascending_node = 74.01692503, .k_rates.semi_major_axis = -0.00196176, .k_rates.eccentricity = -0.00004397, .k_rates.inclination = -0.00242939, .k_rates.mean_longitude = 428.48202785, .k_rates.longitude_perihelion = 0.40805281, .k_rates.longitude_ascending_node = 0.04240589, .additional_terms.b = 0.00058331, .additional_terms.c = -0.97731848, .additional_terms.s = 0.17689245, .additional_terms.f = 7.67025 };
     Planet neptune = { .k_elements.semi_major_axis = 30.06992276, .k_elements.eccentricity = 0.00859048, .k_elements.inclination = 1.77004347, .k_elements.mean_longitude = -55.12002969, .k_elements.longitude_perihelion = 44.96476227, .k_elements.longitude_ascending_node = 131.78422574, .k_rates.semi_major_axis = 0.00026291, .k_rates.eccentricity = 0.00005105, .k_rates.inclination = 0.00035372, .k_rates.mean_longitude = 218.45945325, .k_rates.longitude_perihelion = -0.32241464, .k_rates.longitude_ascending_node = -0.00508664, .additional_terms.b = -0.00041348, .additional_terms.c = 0.68346318, .additional_terms.s = -0.10162547, .additional_terms.f = 7.67025 };
 
-    double result[2];
-    double julianEphemerisDate = calcJulianEphemerisDate();
+    Planet *testPlanets[] = { &mercury, &venus, &earth, &mars, &jupiter, &saturn, &uranus, &neptune };
+    double julianEphemerisDate = calcJulianEphemerisDate(requestedTime);
     double currentT = calcKeplerT(julianEphemerisDate);
-    printf("Julian Ephemeris Date:\t\t\t%.6f\n", julianEphemerisDate);
-    printf("Argument T:\t\t\t\t\t\t\t%.6f\n", currentT);
 
-    calcCurrentElements(&mercury, currentT);
-    printf("Current Semi Major Axis:\t\t%.6f\n", mercury.current_k_elements.semi_major_axis);
+    for (int i = 0; i < numberOfPlanets; i++) {
+        calcCurrentElements(testPlanets[i], currentT);
+        calcArgumentPerihelion(testPlanets[i]);
+        calcMeanAnomaly(testPlanets[i], currentT);
+        calcEccentricAnomaly(testPlanets[i]);
+        calcHeliocentricCoords(testPlanets[i]);
+        coords[i * 3] = testPlanets[i]->heliocentric_coordinates.x;
+        coords[i * 3 + 1] = testPlanets[i]->heliocentric_coordinates.y;
+        coords[i * 3 + 2] = testPlanets[i]->heliocentric_coordinates.z;
+    }
 
-    calcArgumentPerihelion(&mercury);
-    printf("Argument of Perihelion:\t\t\t%.6f\n", mercury.argument_perihelion);
-
-    calcMeanAnomaly(&mercury, currentT);
-    printf("Mean Anomaly:\t\t\t\t\t\t%.6f\n", mercury.mean_anomaly);
-
-    calcEccentricAnomaly(&mercury);
-    printf("Eccentric Anomaly:\t\t\t\t%.6f\n", mercury.eccentric_anomaly);
-
-    result[0] = julianEphemerisDate;
-    result[1] = currentT;
-    return result;
+    //printf("Julian Ephemeris Date:\t\t\t%.6f\n", julianEphemerisDate);
+    //printf("Argument T:\t\t\t\t\t\t\t%.6f\n", currentT);
+    //printf("Current Semi Major Axis:\t\t%.6f\n", mercury.current_k_elements.semi_major_axis);
+    //printf("Argument of Perihelion:\t\t\t%.6f\n", mercury.argument_perihelion);
+    //printf("Mean Anomaly:\t\t\t\t\t\t%.6f\n", mercury.mean_anomaly);
+    //printf("Eccentric Anomaly:\t\t\t\t%.6f\n", mercury.eccentric_anomaly);
+    //printf("Heliocentric Coordinates:\t\t\t%.6f, %.6f, %.6f\n", mercury.heliocentric_coordinates.x, mercury.heliocentric_coordinates.y, mercury.heliocentric_coordinates.z);
+    return coords;
 }

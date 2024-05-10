@@ -4,9 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebAssembly Example</title>
+    <link rel="stylesheet" href="./RenderEngine/SimulationOverlay/simulation_overlay.css"/>
 
     <script type="module" src="./RenderEngine/presenter.js"></script>
 </head>
-<body>
+<body id="page-body">
+    <div class="simulation-overlay">
+        <div id="date-center">
+            <p id="current-date-time">Date</p>
+            <button>SPEED</button>
+        </div>
+    </div>
 </body>
 </html>
