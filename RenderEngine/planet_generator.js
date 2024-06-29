@@ -1,59 +1,66 @@
 import * as THREE from 'three';
+import { PLANETDATA } from '../CelestialData/planet_data';
+import { SUNDATA } from '../CelestialData/sun_data';
 
-const SUNSIZE = 100;
-
+/**
+ * Generates solar planets and adds them to the provided scene.
+ *
+ * @param {THREE.Scene} scene - The scene to add the solar planets to.
+ * @return {void} This function does not return anything.
+ */
 function generateSolarPlanets(scene) {
-    const planetData = [
-      { name: 'Mercury', size: SUNSIZE * 0.003504, distance: 20 },
-      { name: 'Venus', size: SUNSIZE * 0.008691, distance: 30 },
-      { name: 'Earth', size: SUNSIZE * 0.009149, distance: 40 },
-      { name: 'Mars', size: SUNSIZE * 0.004868, distance: 50 },
-      { name: 'Jupiter', size: SUNSIZE * 0.100398, distance: 70 },
-      { name: 'Saturn', size: SUNSIZE * 0.083626, distance: 100 },
-      { name: 'Uranus', size: SUNSIZE * 0.036422, distance: 200 },
-      { name: 'Neptune', size: SUNSIZE * 0.035359, distance: 300 }
-    ];
-
-    for (let i = 0; i < planetData.length; i++) {
-      const planetInfo = planetData[i];
-      const geometry = new THREE.SphereGeometry(planetInfo.size, 10, 10);
-      const material = new THREE.MeshBasicMaterial({
-        color: 0xffffff,
-        wireframe: true
-      });
-      const planet = new THREE.Mesh(geometry, material);
-      planet.position.set(planetInfo.distance, 0, 0);
-      planet.name = planetInfo.name;
-      scene.add(planet);
-    }
+  generateHelperRings(scene);
+  for (let i = 0; i < PLANETDATA.length; i++) {
+    const planetInfo = PLANETDATA[i];
+    const geometry = new THREE.SphereGeometry(planetInfo.size, 10, 10);
+    const material = new THREE.MeshBasicMaterial({
+      color: 0xffffff,
+      wireframe: true
+    });
+    const planet = new THREE.Mesh(geometry, material);
+    planet.position.set(planetInfo.distance, 0, 0);
+    planet.name = planetInfo.name;
+    scene.add(planet);
+  }
 }
 
-function singlePlanetTest(scene) {
-  const planetInfo = { name: 'Mercury', size: SUNSIZE * 0.003504, distance: 20 };
-  const planetInfoTwo ={ name: 'Venus', size: SUNSIZE * 0.008691, distance: 30 }
-  const geometry = new THREE.SphereGeometry(planetInfo.size, 10, 10);
-  const material = new THREE.MeshBasicMaterial({
-    color: 0xffffff,
-    wireframe: true
-  });
-  const planet = new THREE.Mesh(geometry, material);
-  planet.position.set(planetInfo.distance, 0, 0);
-  planet.name = planetInfo.name;
-  scene.add(planet);
-
-  const geometrytwo = new THREE.SphereGeometry(planetInfo.size, 10, 10);
-  const materialtwo = new THREE.MeshBasicMaterial({
-    color: 0xffffff,
-    wireframe: true
-  });
-  const planettwo = new THREE.Mesh(geometrytwo, materialtwo);
-  planettwo.position.set(planetInfoTwo.distance, 0, 0);
-  planettwo.name = planetInfoTwo.name;
-  scene.add(planettwo);
+/**
+ * Generates helper rings for planets to allow for better visibility and adds them to the provided scene.
+ *
+ * @param {THREE.Scene} scene - The scene to add the helper rings to.
+ * @return {void} This function does not return anything.
+ */
+function generateHelperRings(scene) {
+  for (let i = 0; i < PLANETDATA.length; i++) {
+    const planetInfo = PLANETDATA[i];
+    const geometry = new THREE.SphereGeometry(planetInfo.size * 2, 10, 10);
+    const material = new THREE.MeshBasicMaterial({
+      color: 0x00ff00,
+      wireframe: true
+    });
+    const planetHelper = new THREE.Mesh(geometry, material);
+    planetHelper.position.set(planetInfo.distance, 0, 0);
+    planetHelper.name = planetInfo.name + "helper";
+    scene.add(planetHelper);
+  }
+  // const sunHelperGeometry = new THREE.SphereGeometry(sunData[0].size * 100, 10, 10);
+  // const sunHelperMaterial = new THREE.MeshBasicMaterial({
+  //   color: 0xffff00,
+  //   wireframe: true
+  // });
+  // const sunHelper = new THREE.Mesh(sunHelperGeometry, sunHelperMaterial);
+  // sunHelper.position.set(0, 0, 0);
+  // scene.add(sunHelper);
 }
 
+/**
+ * Generates a sun object and adds it to the provided scene.
+ *
+ * @param {THREE.Scene} scene - The scene to add the sun object to.
+ * @return {void} This function does not return anything.
+ */
 function generateSun(scene) {
-  const geometry = new THREE.SphereGeometry(SUNSIZE, 10, 10);
+  const geometry = new THREE.SphereGeometry(SUNDATA[0].size, 10, 10);
   const material = new THREE.MeshBasicMaterial({
     color: 0xFFFF00, // Sun color
     wireframe: true
@@ -63,4 +70,4 @@ function generateSun(scene) {
   scene.add(sun);
 }
 
-export {generateSolarPlanets, singlePlanetTest, generateSun }
+export {generateSolarPlanets, generateSun }
